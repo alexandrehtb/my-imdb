@@ -2,29 +2,27 @@ require 'spec_helper'
 
 describe "Static pages" do
 
-  let(:base_title) { "My-IMDb" }
+  subject { page }
+
+  shared_examples_for "all static pages" do
+    it { should have_selector('h1', text: heading) }
+    it { should have_title(full_title(page_title)) }
+  end
 
   describe "Home page" do
-  	it "should have the content 'My-IMDb'" do
-  		visit '/static_pages/home'
-  		expect(page).to have_content('My-IMDb')
-  	end
+    before { visit root_path }
+    let(:heading)     { 'My-IMDb' }
+    let(:page_title)  { '' }
 
-  	it "should have the title 'Home'" do
-  		visit '/static_pages/home'
-  		expect(page).to have_title("#{base_title} | Home")
-  	end
+    it_should_behave_like "all static pages"
+    it { should_not have_title('| Home') }
   end
 
   describe "About page" do
-  	it "should have the content 'About'" do
-  		visit '/static_pages/about'
-  		expect(page).to have_content('About')
-  	end
+    before { visit about_path }
+  	let(:heading)     { 'About' }
+    let(:page_title)  { 'About' }
 
-  	it "should have the title 'About'" do
-  		visit '/static_pages/about'
-  		expect(page).to have_title("#{base_title} | About")
-  	end
+    it_should_behave_like "all static pages"
   end
 end
